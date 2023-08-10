@@ -1,0 +1,23 @@
+---
+
+- name: Deploy web server to ubuntu VM 
+  hosts: localhost 
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install Apache web server
+      apt: 
+        name: apache2
+        state: present
+
+    - name: Copy HTML file
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+  
+    - name: Copy PHP file
+      copy:
+        src: login.php
+        dest: /var/www/html/login.php
+        mode: 'o644' 

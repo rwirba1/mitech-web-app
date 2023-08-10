@@ -1,0 +1,75 @@
+---
+- name: Deploy web server with PHP to Ubuntu VM
+  hosts: localhost
+  become: true
+  gather_facts: true
+  tasks:
+
+    - name: Install Apache web server and PHP
+      apt:
+        name:
+          - apache2
+          - php
+          - libapache2-mod-php
+        state: present
+
+    - name: Enable PHP module in Apache
+      apache2_module:
+        name: php
+        state: present
+        force: yes
+    
+    - name: Update Apache Ports.conf
+      lineinfile:
+        path: /etc/apache2/ports.conf
+        regexp: 'listen'
+        line: 'Listen 80'
+
+    - name: Enable SSL module in Apache
+      apache2_module:
+      state: present
+      force: yes
+
+    - name: Update default Apache site configuration
+      template:
+        src: default-site.conf.js
+        dest: /etc/apache2/sites-available/000-default-conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy HTML file
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+
+    - name: Copy PHP file
+      copy:
+        src: login.php
+        dest: /var/www/html/login.php
+        mode: '0644'
+
+    - name: Copy welcome.html file
+      copy:
+        src: welcome.html
+        dest: /var/www/html/welcome.html    
+
+    - name: Copy send-email.php
+      copy:
+        src: send-email.php
+        dest: /var/www/html/send-email.php
+
+    - name: Copy logo.png
+      copy:
+        src: logo.png
+        dest: /var/www/html/logo.png    
+
+    - name: Copy Background file
+      copy:
+        src: bk_ground.png
+        dest: /var/www/html/bk_ground.png    
+
+    - name: Restart Apache service
+      service:
+        name: apache2
+        state: restarted
