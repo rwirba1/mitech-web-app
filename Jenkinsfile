@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1' // Replace with your region
-        AWS_ACCESS_KEY_ID = credentials('AKIA2CMM7T2TB3X5ZZQC') // Store your AWS access key as a Jenkins secret
-        AWS_SECRET_ACCESS_KEY = credentials('6YZUZTXgnAlOzYd2GvqtRoyqoMo5y+QW+B0vN43l') // Store your AWS secret key as a Jenkins secret
+        AWS_ACCESS_KEY_ID = credentials('') // Store your AWS access key as a Jenkins secret
+        AWS_SECRET_ACCESS_KEY = credentials('') // Store your AWS secret key as a Jenkins secret
     }
 
     stages {
