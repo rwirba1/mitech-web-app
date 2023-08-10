@@ -50,12 +50,15 @@ pipeline {
     post {
         always {
             // Add steps that you always want to run after the pipeline, even if a stage fails.
+            sh 'echo "This will always run"'
         }
         success {
             // Add steps to run after the pipeline completes successfully.
+            sh 'echo "Build Was Successfull"'
         }
         failure {
             // Add steps to run if the pipeline fails.
+            sh 'echo "Build Failed"'
         }
     }
 }
