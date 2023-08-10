@@ -64,6 +64,7 @@ pipeline {
             node('master') {
             // Add steps to run if the pipeline fails.
             sh 'echo "Build Failed"'
+            }    
         }
     }
 }
