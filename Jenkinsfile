@@ -49,14 +49,17 @@ pipeline {
     
     post {
         always {
+            node('master') {  // This specifies the Jenkins master node.
             // Add steps that you always want to run after the pipeline, even if a stage fails.
             sh 'echo "This will always run"'
         }
         success {
+            node('master') {
             // Add steps to run after the pipeline completes successfully.
             sh 'echo "Build Was Successfull"'
         }
         failure {
+            node('master') {
             // Add steps to run if the pipeline fails.
             sh 'echo "Build Failed"'
         }
