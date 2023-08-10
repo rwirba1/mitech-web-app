@@ -25,11 +25,6 @@
         regexp: 'listen'
         line: 'Listen 80'
 
-    - name: Enable SSL module in Apache
-      apache2_module:
-      state: present
-      force: yes
-
     - name: Update default Apache site configuration
       template:
         src: default-site.conf.js
