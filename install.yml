@@ -5,6 +5,10 @@
   gather_facts: true
   tasks:
 
+    - name: Update APT cache
+      apt:
+        update_cache: yes
+      
     - name: Install Apache web server and PHP
       apt:
         name:
