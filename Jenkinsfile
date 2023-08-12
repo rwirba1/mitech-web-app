@@ -73,12 +73,7 @@ pipeline {
                         sh '''#!/bin/bash
                         ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/Build-MiTech-Web/install.yml --private-key=$SSH_KEY -u ubuntu -e target="${EC2_PUBLIC_IP}"
                         '''
-                    //ansiblePlaybook(
-                       // playbook: '/home/ubuntu/jenkins/workspace/Build-MiTech-Web/install.yml',
-                       // inventory: "${env.EC2_PUBLIC_IP},",
-                       // credentialsId: 'ansible-ssh-keys',
-                       // become: true,
-                       // extraVars: [target: ${env.EC2_PUBLIC_IP}"]
+                    }
                 }
             }
         }
