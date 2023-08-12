@@ -50,4 +50,5 @@ resource "aws_instance" "prod_web_server" {
 output "instance_public_ip" {
   value = aws_instance.prod_web_server.public_ip
 }
+#
 
