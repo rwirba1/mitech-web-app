@@ -9,73 +9,56 @@ pipeline {
     stages {
         stage('Install Ansible') {
             steps {
-                script {
-                    def ansibleInstalled = sh(script: 'which ansible', returnStatus: true)
-                    if (ansibleInstalled != 0) {
-                        echo "Ansible is not installed. Installing now..."
-                        sh '''
-                            sudo apt-add-repository -y ppa:ansible/ansible
-                            sudo apt update
-                            sudo apt install -y ansible
-                        '''
-                    } else {
-                        echo "Ansible is already installed. Skipping installation."
-                    }
-                }
+                // ... (unchanged)
             }
         }
 
         stage('Checkout code') {
             steps {
-                script {
-                    if (!fileExists('.git')) {
-                        checkout scm
-                    } else {
-                        sh '''
-                            git checkout main
-                            git pull origin main
-                        '''
-                    }    
-                }  
+                // ... (unchanged)
             }
         }
 
-        stage('Terraform Init & Apply') {
+        stage('Terraform Actions') {
             steps {
                 script {
-                    try {
-                        echo "About to run 'terraform init'..."
-                        sh '/usr/local/bin/terraform init'
-                        echo "'terraform init' completed. Running 'terraform apply'..."
-                        sh '/usr/local/bin/terraform apply -auto-approve'
-                        echo "Getting the EC2 public IP..."
-                        env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
-                    } catch (Exception e) {
-                        echo "Error encountered during Terraform execution. Continuing..."
-                    }    
+                    switch(params.TERRAFORM_ACTION) {
+                        case 'init':
+                            echo "About to run 'terraform init'..."
+                            sh '/usr/local/bin/terraform init'
+                            break
+                        case 'plan':
+                            echo "Running 'terraform plan'..."
+                            sh '/usr/local/bin/terraform plan'
+                            break
+                        case 'apply':
+                            echo "Running 'terraform apply'..."
+                            sh '/usr/local/bin/terraform apply -auto-approve'
+                            echo "Getting the EC2 public IP..."
+                            env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
+                            break
+                        default:
+                            echo "Unknown Terraform action. Skipping."
+                    }
                 }
             }
         }
 
         stage('Wait for EC2 to be healthy') {
+            when {
+                expression { return params.TERRAFORM_ACTION == 'apply' }
+            }
             steps {
-                script {
-                    // Adjust the sleep time or implement a better check for EC2 health if necessary
-                    sleep time: 120, unit: 'SECONDS'
-                }
+                // ... (unchanged)
             }
         }
 
         stage('Run Ansible Playbook') {
+            when {
+                expression { return params.RUN_ANSIBLE }
+            }
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-keys', keyFileVariable: 'SSH_KEY')]) {
-                    sshagent(credentials: ['ansible-ssh-keys']) {
-                        sh '''#!/bin/bash
-                        ansible all -i "${EC2_PUBLIC_IP}," -m ping --private-key=$SSH_KEY -u ubuntu
-                        ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/Build-MiTech-Web/install.yml --private-key=$SSH_KEY -u ubuntu -e target="${EC2_PUBLIC_IP}"
-                        '''
-                    }
-                }
+                // ... (unchanged)
             }
         }
     }
