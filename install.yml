@@ -1,6 +1,6 @@
 ---
 - name: Deploy web server with PHP to Ubuntu VM
-  hosts: "{{ target }}"
+  hosts: all
   become: true
   gather_facts: true
   tasks:
