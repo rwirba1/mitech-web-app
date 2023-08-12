@@ -45,10 +45,7 @@ pipeline {
                 script {
                     if (params.TERRAFORM_ACTION.contains('init')) {
                         echo "Running 'terraform init'..."
-                        case 'init':
-                            echo "About to run 'terraform init'..."
-                            sh '/usr/local/bin/terraform init'
-                            sh '/usr/local/bin/terraform init'
+                        sh '/usr/local/bin/terraform init'
                     }
                     if (params.TERRAFORM_ACTION.contains('apply')) {
                         echo "Running 'terraform apply'..."
