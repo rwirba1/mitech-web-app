@@ -2,7 +2,7 @@ provider "aws" {
   region = "us-east-1" # Change this to your desired AWS region
 }
 
-resource "aws_security_group" "web_sg" {
+resource "aws_security_group" "prod_sg" {
   name        = "web_sg"
   description = "Allow inbound traffic on port 80 and 22"
 
@@ -28,22 +28,22 @@ resource "aws_security_group" "web_sg" {
   }
 
   tags = {
-    Name = "web_sg"
+    Name = "prod_sg"
   }
 }
 
-resource "aws_instance" "web_server" {
+resource "aws_instance" "prod_web_server" {
   ami             = "ami-053b0d53c279acc90" # This AMI ID corresponds to Ubuntu 18.04 in us-west-2. Find the correct AMI for your desired Ubuntu version and region.
   instance_type   = "t2.micro" # Choose the desired instance type.
-  security_groups = [aws_security_group.web_sg.name]
+  security_groups = [aws_security_group.prod_sg.name]
   key_name        = "mykey" # Use the name of your EC2 Key Pair
 
   tags = {
-    Name = "WebServer"
+    Name = "prod_web_server"
   }
 }
 
 output "instance_public_ip" {
-  value = aws_instance.web_server.public_ip
+  value = aws_instance.prod_web_server.public_ip
 }
 
