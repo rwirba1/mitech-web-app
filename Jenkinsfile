@@ -4,7 +4,6 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'us-east-1' // Replace with your region
         PATH = "/usr/bin/terraform:${env.PATH}"
-}
 
     }
 
