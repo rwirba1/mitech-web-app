@@ -11,12 +11,16 @@ pipeline {
         stage('Install Ansible') {
             steps {
                 script {
-                    echo "Installing Ansible..."
+                    def ansibleInstalled = sh(script: 'which ansible', returnStatus: true)
+                    if (ansibleInstalled != 0) {
+                        echo "Ansible is not installed. Installing now..."
                     sh '''
                         sudo apt-add-repository -y ppa:ansible/ansible
                         sudo apt update
                         sudo apt install -y ansible
                     '''
+                    } else {
+                        echo "Ansible is already installed. Skipping installation."
                 }
             }
         }
