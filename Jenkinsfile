@@ -26,9 +26,9 @@ pipeline {
                 script {
                     // Initialize and apply Terraform configurations
                     echo "About to run 'terraform init'..."
-                    sh 'terraform init'
+                    sh '/usr/bin/terraform init'
                     echo "'terraform init' completed. Running 'terraform apply'..."
-                    sh 'terraform apply -auto-approve'
+                    sh '/usr/bin/terraform apply -auto-approve'
                     echo "Getting the EC2 public IP..."
                     // Capture the public IP from Terraform output
                     env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
