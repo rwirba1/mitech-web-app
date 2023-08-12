@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Adjust the sleep time or implement a better check for EC2 health if necessary
-                    sleep 20
+                    sleep 120
                 }
             }
         }
