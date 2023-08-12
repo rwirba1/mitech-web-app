@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     try {
-                         // Initialize and apply Terraform configurations
+                         //// Initialize and apply Terraform configurations
                         echo "About to run 'terraform init'..."
                         sh '/usr/local/bin/terraform init'
                         echo "'terraform init' completed. Running 'terraform apply'..."
