@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "prod_sg" {
-  name        = "web_sg"
+  name        = "prod_sg"
   description = "Allow inbound traffic on port 80 and 22"
 
   ingress {
