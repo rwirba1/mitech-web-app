@@ -65,7 +65,7 @@ pipeline {
                         inventory: "${env.EC2_PUBLIC_IP},",
                         credentialsId: 'ansible-ssh-keys',
                         become: true
-                        extras: "--extra-vars 'target=${env.EC2_PUBLIC_IP}'"
+                        extraVars: " [target: env.EC2_PUBLIC_IP]'"
                     // Run the Ansible playbook to deploy your application
                     // Run the Ansible playbook and pass the EC2 public IP as an extra variable
                     //sh "ansible-playbook -i ${env.EC2_PUBLIC_IP}, install.yml --extra-vars 'target=${env.EC2_PUBLIC_IP}'"
