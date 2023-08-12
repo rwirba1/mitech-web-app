@@ -19,8 +19,7 @@ pipeline {
                 }
             }
         }
-    }
-    stages {
+    
         stage('Checkout code') {
             steps {
                 script {
