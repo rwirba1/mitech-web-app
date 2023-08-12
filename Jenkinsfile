@@ -43,23 +43,22 @@ pipeline {
         stage('Terraform Actions') {
             steps {
                 script {
-                    switch(params.TERRAFORM_ACTION) {
+                    if (params.TERRAFORM_ACTION.contains('init')) {
+                        echo "Running 'terraform init'..."
                         case 'init':
                             echo "About to run 'terraform init'..."
                             sh '/usr/local/bin/terraform init'
-                            break
-                        case 'plan':
-                            echo "Running 'terraform plan'..."
-                            sh '/usr/local/bin/terraform plan'
-                            break
-                        case 'apply':
-                            echo "Running 'terraform apply'..."
-                            sh '/usr/local/bin/terraform apply -auto-approve'
-                            echo "Getting the EC2 public IP..."
-                            env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
-                            break
-                        default:
-                            echo "Unknown Terraform action. Skipping."
+                            sh '/usr/local/bin/terraform init'
+                    }
+                    if (params.TERRAFORM_ACTION.contains('apply')) {
+                        echo "Running 'terraform apply'..."
+                        sh '/usr/local/bin/terraform apply -auto-approve'
+                        env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
+                    }
+                    if (params.TERRAFORM_ACTION.contains('destroy')) {
+                        echo "Running 'terraform destroy'..."
+                        sh '/usr/local/bin/terraform destroy -auto-approve'
+
                     }
                 }
             }
