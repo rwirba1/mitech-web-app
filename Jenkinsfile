@@ -6,7 +6,20 @@ pipeline {
         PATH = "/usr/local/bin/terraform:${env.PATH}"
 
     }
-
+    stages {
+        stage('Install Ansible') {
+            steps {
+                script {
+                    echo "Installing Ansible..."
+                    sh '''
+                        sudo apt-add-repository -y ppa:ansible/ansible
+                        sudo apt update
+                        sudo apt install -y ansible
+                    '''
+                }
+            }
+        }
+    }
     stages {
         stage('Checkout code') {
             steps {
