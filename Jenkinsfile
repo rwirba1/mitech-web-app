@@ -11,12 +11,16 @@ pipeline {
         stage('Install Ansible') {
             steps {
                 script {
-                    echo "Installing Ansible..."
+                    def ansibleInstalled = sh(script: 'which ansible', returnStatus: true)
+                    if (ansibleInstalled != 0) {
+                        echo "Ansible is not installed. Installing now..."
                     sh '''
                         sudo apt-add-repository -y ppa:ansible/ansible
                         sudo apt update
                         sudo apt install -y ansible
                     '''
+                    } else {
+                        echo "Ansible is already installed. Skipping installation."
                 }
             }
         }
@@ -24,11 +28,11 @@ pipeline {
         stage('Checkout code') {
             steps {
                 script {
-                    if (!fileExists('KNOWN_FILE_OR_DIR')) {
+                    if (!fileExists('.git')) {
                 // Clone your repository containing application files, playbook, and Terraform files
                         checkout scm
                     } else {
-                        "File already exist. Skipping cloning."
+                        sh 'git pull'
                     }    
                 }  
             }
@@ -37,14 +41,18 @@ pipeline {
         stage('Terraform Init & Apply') {
             steps {
                 script {
-                    // Initialize and apply Terraform configurations
-                    echo "About to run 'terraform init'..."
-                    sh '/usr/local/bin/terraform init'
-                    echo "'terraform init' completed. Running 'terraform apply'..."
-                    sh '/usr/local/bin/terraform apply -auto-approve'
-                    echo "Getting the EC2 public IP..."
-                    // Capture the public IP from Terraform output
-                    env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
+                    try {
+                         //// Initialize and apply Terraform configurations
+                        echo "About to run 'terraform init'..."
+                        sh '/usr/local/bin/terraform init'
+                        echo "'terraform init' completed. Running 'terraform apply'..."
+                        sh '/usr/local/bin/terraform apply -auto-approve'
+                        echo "Getting the EC2 public IP..."
+                        // Capture the public IP from Terraform output
+                        env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
+                    } catch (Exception e) {    
+                        echo "Error encountered during Terraform execution. Continuing..."
+                    }    
                 }
             }
         }
@@ -53,7 +61,7 @@ pipeline {
             steps {
                 script {
                     // Adjust the sleep time or implement a better check for EC2 health if necessary
-                    sleep 20
+                    sleep 120
                 }
             }
         }
