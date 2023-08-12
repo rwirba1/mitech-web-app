@@ -24,11 +24,11 @@ pipeline {
         stage('Checkout code') {
             steps {
                 script {
-                    if (!fileExists('KNOWN_FILE_OR_DIR')) {
+                    if (!fileExists('.git')) {
                 // Clone your repository containing application files, playbook, and Terraform files
                         checkout scm
                     } else {
-                        "File already exist. Skipping cloning."
+                        sh 'git pull'
                     }    
                 }  
             }
