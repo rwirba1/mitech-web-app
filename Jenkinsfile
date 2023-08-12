@@ -31,7 +31,10 @@ pipeline {
                     if (!fileExists('.git')) {
                         checkout scm
                     } else {
-                        sh 'git pull'
+                        sh '''
+                            git checkout main
+                            git pull origin main
+                        '''
                     }    
                 }  
             }
