@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1' // Replace with your region
-        PATH = "/usr/local/bin/terraform:${env.PATH}"
+        ANSIBLE_HOST_KEY_CHECKING = 'False'
+        //PATH = "/usr/local/bin/terraform:${env.PATH}"
 
     }
     stages {
