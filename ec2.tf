@@ -27,6 +27,10 @@ resource "aws_security_group" "prod_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  lifecycle {
+    ignore_changes = [name]
+  }
+
   tags = {
     Name = "prod_sg"
   }
