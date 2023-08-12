@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1' // Replace with your region
-        PATH = "/usr/bin/terraform:${env.PATH}"
+        PATH = "/usr/local/bin/terraform:${env.PATH}"
 
     }
 
@@ -26,9 +26,9 @@ pipeline {
                 script {
                     // Initialize and apply Terraform configurations
                     echo "About to run 'terraform init'..."
-                    sh '/usr/bin/terraform init'
+                    sh '/usr/local/bin/terraform init'
                     echo "'terraform init' completed. Running 'terraform apply'..."
-                    sh '/usr/bin/terraform apply -auto-approve'
+                    sh '/usr/local/bin/terraform apply -auto-approve'
                     echo "Getting the EC2 public IP..."
                     // Capture the public IP from Terraform output
                     env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
