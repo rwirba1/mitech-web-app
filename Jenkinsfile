@@ -61,7 +61,7 @@ pipeline {
             steps {
                 script {
                     // Adjust the sleep time or implement a better check for EC2 health if necessary
-                    sleep time: 120, unit: 'SECONDS'
+                    sleep time: 5, unit: 'SECONDS'
                 }
             }
         }
@@ -71,8 +71,8 @@ pipeline {
                 script {
                     sshagent(['slave-ssh-credentials']) {
                         sh '''#!/bin/bash
-                        ansible all -i "${EC2_PUBLIC_IP}," -m ping --private-key=$SSH_KEY -u ubuntu
-                        ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/Build-MiTech-Web/install.yml --private-key=$SSH_KEY -u ubuntu -e target="${EC2_PUBLIC_IP}"
+                        ansible all -i "${EC2_PUBLIC_IP}," -m ping -u ubuntu
+                        ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/Build-MiTech-Web/install.yml -u ubuntu -e target="${EC2_PUBLIC_IP}"
                         '''
                     }
                 }
