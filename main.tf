@@ -51,6 +51,20 @@ resource "aws_security_group" "instance_sg" {
     protocol    = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
   }
+
+    ingress {
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb_sg.id]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
 }
 
 # Create an IAM Instance Profile
@@ -63,9 +77,8 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 resource "aws_instance" "ec2_instance" {
   ami           = "ami-0261755bbcb8c4a84"
   instance_type = "t2.micro"
-  key_name        = "mykey"
 
-  iam_instance_profile = aws_iam_role.ec2_role.name
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   tags = {
     Name = "mt-web-prod-ue-1"
@@ -97,29 +110,6 @@ resource "aws_security_group" "lb_sg" {
   }
 }
 
-  # Allow all traffic from the load balancer's security group
-  ingress {
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
-  }
-
-  # Allow all traffic from the load balancer's security group
-  ingress {
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
-  }
-
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }    
-
 # Create a target group for the Load Balancer
 resource "aws_lb_target_group" "mt-web-prod-tg" {
   name     = "mt-web-prod-tg"
@@ -145,4 +135,3 @@ resource "aws_lb_listener" "mt-web-prod_lb_listener" {
     target_group_arn = aws_lb_target_group.mt-web-prod-tg.arn
   }
 }
-
