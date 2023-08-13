@@ -69,7 +69,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    sshagent(credentials: ['slave-ssh-credentials']) {
+                    sshagent(['slave-ssh-credentials']) {
                         sh '''#!/bin/bash
                         ansible all -i "${EC2_PUBLIC_IP}," -m ping --private-key=$SSH_KEY -u ubuntu
                         ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/Build-MiTech-Web/install.yml --private-key=$SSH_KEY -u ubuntu -e target="${EC2_PUBLIC_IP}"
