@@ -119,14 +119,6 @@ resource "aws_lb_target_group" "mt-web-prod-tg" {
     interval            = 30
     path                = "/"
   }
-
-  # Allow all outbound traffic from instances in the target group
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 # Register the EC2 instance with the target group
