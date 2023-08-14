@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Install Ansible if not already installed
+ansibleInstalled=$(which ansible)
+if [ $? -ne 0 ]; then
+    echo "Ansible is not installed. Installing now..."
+    sudo apt-add-repository -y ppa:ansible/ansible
+    sudo apt update
+    sudo apt install -y ansible
+else
+    echo "Ansible is already installed. Skipping installation."
+fi
+
+# Checkout code
+if [ ! -d '.git' ]; then
+    git clone https://github.com/rwirba1/mitech-web-app.git
+else
+    git checkout jenkins-scripted
+    git pull origin jenkins-scripted
+fi
+
+# Run Terraform init and apply
+echo "About to run 'terraform init'..."
+/usr/local/bin/terraform init
+echo "'terraform init' completed. Running 'terraform apply'..."
+/usr/local/bin/terraform apply -auto-approve
+echo "Getting the EC2 public IP..."
+EC2_PUBLIC_IP=$(terraform output instance_public_ip | tr -d '\n')
+
+# Wait for EC2 to be healthy
+sleep 100
+
+# Run Ansible
+ssh-agent bash -c "ssh-add /home/ubuntu/.ssh/id_rsa; ansible all -i \"${EC2_PUBLIC_IP},\" -m ping -u ubuntu"
+ssh-agent bash -c "ssh-add /home/ubuntu/.ssh/id_rsa; ansible-playbook -i \"${EC2_PUBLIC_IP},\" /path/to/install.yml -u ubuntu -e target=\"${EC2_PUBLIC_IP}\""
+
+# Other steps if needed
+
+echo "This will always run"
+
+
