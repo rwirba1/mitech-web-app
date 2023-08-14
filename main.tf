@@ -4,7 +4,7 @@ provider "aws" {
 
 # Create an IAM User with Administrator permissions
 resource "aws_iam_user" "admin_user" {
-  name = "deployer"
+  name = "script-runner"
 }
 
 resource "aws_iam_user_policy_attachment" "admin_policy_attachment" {
@@ -14,7 +14,7 @@ resource "aws_iam_user_policy_attachment" "admin_policy_attachment" {
 
 # Create an IAM Role
 resource "aws_iam_role" "ec2_role" {
-  name = "deployerrole"
+  name = "script-runnerrole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "ec2_role_attachment" {
 
 # Create a security group for the EC2 instance
 resource "aws_security_group" "instance_sg" {
-  name_prefix = "mt-web-prod-ue-1-sg"
+  name_prefix = "new-app-ue-1-sg"
 
   ingress {
     from_port   = 0
@@ -50,7 +50,7 @@ resource "aws_security_group" "instance_sg" {
     to_port     = 0
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    security_groups = [aws_security_group.lb_sg.id]
+    
   }
 
   egress {
@@ -66,7 +66,7 @@ resource "aws_security_group" "instance_sg" {
 
 # Create an IAM Instance Profile
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "deployer-instance-profile"
+  name = "script-runner-instance-profile"
   role = aws_iam_role.ec2_role.name
 }
 
@@ -79,7 +79,7 @@ resource "aws_instance" "ec2_instance" {
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   tags = {
-    Name = "mt-web-prod-ue-1"
+    Name = "new-app-ue-1"
   }
 
   security_groups = [aws_security_group.instance_sg.name]
@@ -87,7 +87,7 @@ resource "aws_instance" "ec2_instance" {
 
 # Create an Application Load Balancer
 resource "aws_lb" "mt-web-prod_lb" {
-  name               = "mt-web-prod-lb"
+  name               = "new-app-ue-1-lb"
   internal           = false
   load_balancer_type = "application"
 
@@ -98,7 +98,7 @@ resource "aws_lb" "mt-web-prod_lb" {
 
 # Create a security group for the Load Balancer
 resource "aws_security_group" "lb_sg" {
-  name_prefix = "mt-web-prod-lb-sg"
+  name_prefix = "new-app-ue-1-lb-sg"
 
   ingress {
     from_port   = 0
@@ -121,8 +121,8 @@ resource "aws_security_group" "lb_sg" {
 }
 
 # Create a target group for the Load Balancer
-resource "aws_lb_target_group" "mt-web-prod-tg" {
-  name     = "mt-web-prod-tg"
+resource "aws_lb_target_group" "new-app-prod-tg" {
+  name     = "new-app-prod-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = "vpc-05a674f3e556c74bc"  # Specify your VPC ID here
@@ -138,19 +138,19 @@ resource "aws_lb_target_group" "mt-web-prod-tg" {
 
 # Register the EC2 instance with the target group
 resource "aws_lb_target_group_attachment" "mt-web-prod_tg_attachment" {
-  target_group_arn = aws_lb_target_group.mt-web-prod-tg.arn
+  target_group_arn = aws_lb_target_group.new-app-prod-tg.arn
   target_id        = aws_instance.ec2_instance.id
 }
 
 # Create an Application Load Balancer Listener
-resource "aws_lb_listener" "mt-web-prod_lb_listener" {
+resource "aws_lb_listener" "new-app-prod_lb_listerner" {
   load_balancer_arn = aws_lb.mt-web-prod_lb.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.mt-web-prod-tg.arn
+    target_group_arn = aws_lb_target_group.new-app-prod-tg.arn
   }
 }
 
