@@ -19,7 +19,7 @@
 
     - name: Enable PHP module in Apache
       apache2_module:
-        name: php7_module
+        name: php7
         state: present
         force: yes
     
