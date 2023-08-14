@@ -1,3 +1,5 @@
+//RUN THIS SCRIPT IN EXECUTE SHELL TO PERFORM TASKS
+
 #!/bin/bash
 
 # Install Ansible if not already installed
