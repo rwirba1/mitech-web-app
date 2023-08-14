@@ -101,7 +101,7 @@ resource "aws_security_group" "lb_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["108.200.40.99/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
