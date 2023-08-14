@@ -136,3 +136,8 @@ resource "aws_lb_listener" "mt-web-prod_lb_listener" {
     target_group_arn = aws_lb_target_group.mt-web-prod-tg.arn
   }
 }
+
+output "instance_public_ip" {
+  value = aws_instance.ec2_instance.public_ip
+}
+
