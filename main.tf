@@ -39,9 +39,9 @@ resource "aws_security_group" "instance_sg" {
   name_prefix = "mt-web-prod-ue-1-sg"
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["108.200.40.99/32", "34.230.71.13/32"]
   }
 
