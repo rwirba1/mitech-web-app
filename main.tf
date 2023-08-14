@@ -42,20 +42,14 @@ resource "aws_security_group" "instance_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["108.200.40.99/32"]
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
-  }
-
-    ingress {
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
     security_groups = [aws_security_group.lb_sg.id]
   }
 
@@ -107,7 +101,7 @@ resource "aws_security_group" "lb_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["108.200.40.99/32"]
   }
 }
 
@@ -117,6 +111,22 @@ resource "aws_lb_target_group" "mt-web-prod-tg" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = "vpc-05a674f3e556c74bc"  # Specify your VPC ID here
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 30
+    path                = "/"
+  }
+
+  # Allow all outbound traffic from instances in the target group
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 # Register the EC2 instance with the target group
@@ -140,4 +150,3 @@ resource "aws_lb_listener" "mt-web-prod_lb_listener" {
 output "instance_public_ip" {
   value = aws_instance.ec2_instance.public_ip
 }
-
