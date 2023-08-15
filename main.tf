@@ -41,8 +41,8 @@ resource "aws_security_group" "instance_sg" {
   ingress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["108.200.40.99/32", "34.230.71.13/32"]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -131,7 +131,7 @@ resource "aws_lb_target_group" "mt-web-prod-tg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 5
-    interval            = 30
+    interval            = 10
     path                = "/"
   }
 }
