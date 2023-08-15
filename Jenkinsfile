@@ -48,6 +48,7 @@ pipeline {
                         sh '/usr/local/bin/terraform init'
                         echo "'terraform init' completed. Running 'terraform apply'..."
                         sh '/usr/local/bin/terraform apply -auto-approve'
+                        sh '/usr/local/bin/terraform destroy -auto-approve'
                         echo "Getting the EC2 public IP..."
                         env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
                     } catch (Exception e) {
