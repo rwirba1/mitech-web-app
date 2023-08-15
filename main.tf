@@ -39,19 +39,19 @@ resource "aws_security_group" "instance_sg" {
   name_prefix = "new-app-ue-1-sg"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["108.200.40.99/32", "34.230.71.13/32"]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = "22"
+    to_port     = "22"
   }
 
   ingress {
-    from_port   = 0
-    to_port     = 0
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    
+    from_port   = "80"
+    to_port     = "80"
   }
+
 
   egress {
     from_port       = 0
