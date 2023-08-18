@@ -70,7 +70,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 script {
-                    sshagent(['slave-ssh-credentials']) {
+                    sshagent(['jenkins-user-ssh-key']) {
                         sh '''#!/bin/bash
                         ansible all -i "${EC2_PUBLIC_IP}," -m ping -u ubuntu
                         ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/Build-web-app/install.yml -u ubuntu -e target="${EC2_PUBLIC_IP}"
