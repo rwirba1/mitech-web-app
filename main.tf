@@ -74,7 +74,7 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 resource "aws_instance" "ec2_instance" {
   ami           = "ami-0261755bbcb8c4a84"
   instance_type = "t2.micro"
-  key_name      = "mykey"
+  key_name      = "ryankey"
 
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
