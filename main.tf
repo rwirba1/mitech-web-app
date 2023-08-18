@@ -93,7 +93,7 @@ resource "aws_lb" "mt-web-prod_lb" {
 
   enable_deletion_protection = false
 
-  subnets = ["subnet-0877b0849fd657ca2", "subnet-08ca423b8ede84de8", "subnet-0e8523160d8d05844"]  # Specify your subnet IDs here
+  subnets = ["subnet-098cf4ebc26256760", "subnet-0a08f7c244bab40a4", "subnet-09a37192949d9f8f6"]  # Specify your subnet IDs here
 }
 
 # Create a security group for the Load Balancer
@@ -125,7 +125,7 @@ resource "aws_lb_target_group" "mt-web-prod-tg" {
   name     = "mt-web-prod-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "vpc-05a674f3e556c74bc"  # Specify your VPC ID here
+  vpc_id   = "vpc-00e1890d94c4fcc63"  # Specify your VPC ID here
 
   health_check {
     healthy_threshold   = 2
