@@ -1,6 +1,6 @@
 ---
 - name: Deploy web server with PHP to Ubuntu VM
-  hosts: all
+  hosts: 172.31.35.242
   become: true
   gather_facts: true
   tasks:
