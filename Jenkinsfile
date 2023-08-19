@@ -44,13 +44,14 @@ pipeline {
             steps {
                 script {
                     try {
-                        echo "About to run 'terraform init'..."
-                        sh '/usr/local/bin/terraform init'
-                        echo "'terraform init' completed. Running 'terraform apply'..."
-                        sh '/usr/local/bin/terraform apply -auto-approve'
+                        // echo "About to run 'terraform init'..."
+                        // sh '/usr/local/bin/terraform init'
+                        sh '/usr/local/bin/terraform destroy -auto-approve'
+                        // echo "'terraform init' completed. Running 'terraform apply'..."
+                        // sh '/usr/local/bin/terraform apply -auto-approve'
                         // sh '/usr/local/bin/terraform destroy -auto-approve'
-                        echo "Getting the EC2 public IP..."
-                        env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
+                        // echo "Getting the EC2 public IP..."
+                        // env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
                     } catch (Exception e) {
                         echo "Error encountered during Terraform execution. Continuing..."
                     }    
