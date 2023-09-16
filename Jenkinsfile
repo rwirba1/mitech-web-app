@@ -64,8 +64,8 @@ pipeline {
 
         stage('Run Ansible Playbook') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-keys', keyFileVariable: 'SSH_KEY')]) {
-                    sshagent(credentials: ['ansible-ssh-keys']) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-agent', keyFileVariable: 'SSH_KEY')]) {
+                    sshagent(credentials: ['ansible-ssh-agent']) {
                         sh '''#!/bin/bash
                         ansible all -i "${EC2_PUBLIC_IP}," -m ping --private-key=$SSH_KEY -u ubuntu
                         ansible-playbook -i "${EC2_PUBLIC_IP}," /home/ubuntu/jenkins/workspace/devops-demo/install.yml --private-key=$SSH_KEY -u ubuntu -e target="${EC2_PUBLIC_IP}"
