@@ -32,7 +32,7 @@ pipeline {
                         checkout scm
                     } else {
                         sh '''
-                            git checkout main
+                            git checkout pipeline-test
                             git pull origin pipeline-test
                         '''
                     }    
