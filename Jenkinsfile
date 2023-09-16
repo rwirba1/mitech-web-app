@@ -33,7 +33,7 @@ pipeline {
                     } else {
                         sh '''
                             git checkout pipeline-test
-                            git pull origin pipeline-test
+                            // git pull origin pipeline-test
                         '''
                     }    
                 }  
