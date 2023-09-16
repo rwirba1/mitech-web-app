@@ -49,12 +49,9 @@ pipeline {
                         echo "Running 'terraform apply'..."
                         sh '/usr/local/bin/terraform apply -auto-approve'
                         env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
-                    }
-
-                    }
-                }
-            }
-        }
+                 }
+           }
+       }
 
         stage('Wait for EC2 to be healthy') {
             steps {
