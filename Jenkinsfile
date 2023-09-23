@@ -48,7 +48,7 @@ pipeline {
                     
                         echo "Running 'terraform apply'..."
                         sh '/usr/bin/terraform apply -auto-approve'
-                        env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
+                        env.EC2_PUBLIC_IP = sh(script: "terraform output -json instance_public_ip | jq -r .", returnStdout: true).trim()
                  }
            }
        }
