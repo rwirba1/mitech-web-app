@@ -44,10 +44,10 @@ pipeline {
             steps {
                 script {
                         echo "Running 'terraform init'..."
-                        sh '/usr/local/bin/terraform init'
+                        sh '/usr/bin/terraform init'
                     
                         echo "Running 'terraform apply'..."
-                        sh '/usr/local/bin/terraform apply -auto-approve'
+                        sh '/usr/bin/terraform apply -auto-approve'
                         env.EC2_PUBLIC_IP = sh(script: "terraform output instance_public_ip", returnStdout: true).trim()
                  }
            }
