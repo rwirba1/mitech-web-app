@@ -65,8 +65,8 @@
 
     - name: Copy Background file
       copy:
-        src: white.png
-        dest: /var/www/html/white.png    
+        src: bk_ground.png
+        dest: /var/www/html/bk_ground.png    
 
     - name: Restart Apache service
       service:
