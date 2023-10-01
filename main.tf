@@ -33,19 +33,15 @@ resource "aws_security_group" "demo_sg" {
   }
 }
 
-resource "aws_instance" "demo_web_server" {
+resource "aws_instance" "demo_app" {
   ami             = "ami-053b0d53c279acc90" # This AMI ID corresponds to Ubuntu 18.04 in us-west-2. Find the correct AMI for your desired Ubuntu version and region.
   instance_type   = "t2.micro" # Choose the desired instance type.
   security_groups = [aws_security_group.demo_sg.name]
   key_name        = "demokey" # Use the name of your EC2 Key Pair
 
   tags = {
-    Name = "demo_web_server"
+    Name = "demo_app"
   }
 }
 
-output "instance_public_ip" {
-  value = aws_instance.demo_web_server.public_ip
-}
-#
 
