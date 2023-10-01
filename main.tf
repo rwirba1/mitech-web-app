@@ -4,12 +4,7 @@ provider "aws" {
 
 resource "aws_s3_bucket" "demo-bucket" {
   bucket = "demo-bucket"
-
-  tags = {
-    Name        = "demo-bucket"
-    Environment = "demo"
-  }
-}
+} 
 
 resource "aws_security_group" "demo_sg" {
   name        = "demo_sg"
