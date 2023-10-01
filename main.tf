@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_s3_bucket" "demo-bucket" {
   bucket = "demo-bucket"
-  region = "us-east-1"
+  acl = "private"
 } 
 
 resource "aws_security_group" "demo_sg" {
