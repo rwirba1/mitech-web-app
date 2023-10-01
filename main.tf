@@ -3,8 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "demo-bucket" {
-  bucket = "demo-bucket"
-  acl = "private"
+  bucket = "demo-bucket-20231001"
 } 
 
 resource "aws_security_group" "demo_sg" {
